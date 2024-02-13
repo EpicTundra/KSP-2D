@@ -29,7 +29,7 @@ float gravity(double r2, float trig, int i) {
 
 }
 
-vector_t speedUpdate(rocket_t* rocket, vector_t planPos, float planetRad) { //Updates speed according to engines and gravity, then returns those values. 
+vector_t speedUpdate(rocket_t* rocket, double planPos[2], float planetRad) { //Updates speed according to engines and gravity, then returns those values. 
     double distance_squared = square(dist(planPos[1], planPos[0]));  //Takes in x and y distances to gravitation attractor and sqaures them for gravity
     //if (distance_squared == 0) { cout << "Error:distance_sqaured_speedUpdate=0" << endl; } //Error if distance ever equals 0
     float distance = dist(planPos[1], planPos[0]);
