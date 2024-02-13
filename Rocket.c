@@ -31,7 +31,7 @@ float gravity(double r2, float trig, int i) {
 
 vector_t speedUpdate(rocket_t* rocket, vector_t planPos, float planetRad) { //Updates speed according to engines and gravity, then returns those values. 
     double distance_squared = square(dist(planPos[1], planPos[0]));  //Takes in x and y distances to gravitation attractor and sqaures them for gravity
-    if (distance_squared == 0) { cout << "Error:distance_sqaured_speedUpdate=0" << endl; } //Error if distance ever equals 0
+    //if (distance_squared == 0) { cout << "Error:distance_sqaured_speedUpdate=0" << endl; } //Error if distance ever equals 0
     float distance = dist(planPos[1], planPos[0]);
 
     for (size_t i = 0; i < 2; i++) //Loops through, finding angles to use in gravity function
@@ -44,8 +44,8 @@ vector_t speedUpdate(rocket_t* rocket, vector_t planPos, float planetRad) { //Up
             trig = acos(planPos[0] / distance);
         }
 
-        speed[i] += cos((heading * (PI / 180)) - i * (PI / 2)) * accel() + gravity(distance_squared, trig, i);
-        speed[i] -= aero(speed[i], (dist(planPos[0], planPos[1]) - planetRad)) * sign(speed[i]); //Aerodyamics
+        rocket->speed[i] += cos((heading * (PI / 180)) - i * (PI / 2)) * accel() + gravity(distance_squared, trig, i);
+        rocket->speed[i] -= aero(rocket->speed[i], (dist(planPos[0], planPos[1]) - planetRad)) * sign(rocket->speed[i]); //Aerodyamics
     }
     return speed;
 }
