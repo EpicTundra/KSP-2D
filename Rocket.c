@@ -68,3 +68,7 @@ void updateThrottle(rocket_t* rocket, float value) {
 double sign(double x) {
     return (x > 0) - (x < 0)
 }
+
+void rocketInit(rocket_t* rocket) {
+    // init your default values here lucas
+}
