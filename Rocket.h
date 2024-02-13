@@ -8,12 +8,7 @@
 using namespace std;
 
 typedef struct {
-    double x;
-    double y;
-} vector_t;
-
-typedef struct {
-    vector_t planetPos;
+    double planetPos[2];
     float zoom;                                     //Zoom of ten, a distance of 100 = 10
     float planetRad;
 } game_t;
@@ -35,7 +30,7 @@ typedef struct {
     double speed[2];
 } rocket_t;
 
-vector_t speedUpdate(rocket_t* rocket, vector_t planPos);
+vector_t speedUpdate(rocket_t* rocket, double planPos[2]);
 float dist(float x, float y);
 float aero(rocket_t* rocket, float speed, float height);
 float accel(rocket_t* rocket);
