@@ -32,7 +32,7 @@ typedef struct {
     float massF; //Massflow of Engine in kg/sec
     float dragCeo; //Of total rocket, implemetation of calculator later
 
-    vector_t speed;
+    double speed[2];
 } rocket_t;
 
 vector_t speedUpdate(rocket_t* rocket, vector_t planPos);
