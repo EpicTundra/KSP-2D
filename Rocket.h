@@ -1,25 +1,53 @@
 #pragma once
 
-#include <iostream>
-#include <string>
-#include <vector>
-#include <list>
 #define PI 3.14159265358979323846
 #define G 1
 #define PMass 1000
 #define atmoHeight 30
 #define square(value) pow(value, 2)
-#include <cmath> 
 using namespace std;
 
+typedef struct {
+    double x;
+    double y;
+} vector_t;
 
-class Game {
-public:
-    std::vector<double> planetPos = { 10, -299.8 };
-    float zoom = 1;                                     //Zoom of ten, a distance of 100 = 10
-    float planetRad = 300;
-};
+typedef struct {
+    vector_t planetPos;
+    float zoom;                                     //Zoom of ten, a distance of 100 = 10
+    float planetRad;
+} game_t;
 
+typedef struct {
+    char* engines[2][4];
+
+    int engSelect;
+
+    float heading;
+    float throttle;
+    float fuel;
+    float mass;  //Engine mass in tons + vehicle mass
+    float thrust;  //Engine Thrust, value to compinate for MN
+    float exhV; //Exhaust Velociy of Engine in m/sec
+    float massF; //Massflow of Engine in kg/sec
+    float dragCeo; //Of total rocket, implemetation of calculator later
+
+    vector_t speed;
+} rocket_t;
+
+vector_t speedUpdate(rocket_t* rocket, vector_t planPos);
+float dist(float x, float y);
+float aero(rocket_t* rocket, float speed, float height);
+float accel(rocket_t* rocket);
+float gravity(double r2, float trig, int i);
+void updateHeading(rocket_t* rocket, float value);
+void updateThrottle(rocket_t* rocket, float value);
+double sign(double x);
+
+void rocketInit(rocket_t* rocket);
+void gameInit(game_t* game);
+
+/*
 class Rocket {
 public:
 
@@ -50,3 +78,4 @@ public:
     void updateThrottle(float value);
     double sign(double x);
 };
+*/
