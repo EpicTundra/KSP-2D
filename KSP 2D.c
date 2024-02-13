@@ -7,14 +7,11 @@
 #define PI 3.14159265358979323846
 #include "math.h"
 #include "Rocket.h"
-
-using namespace std;
-
+#include "stdbool.h"
 
 float dist(float x, float y) {
     return sqrt(pow(x, 2) + pow(y, 2));
 }
-
 
 int main()
 {
