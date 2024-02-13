@@ -2,14 +2,10 @@
 // KSP 2D.cpp : This file contains the 'main' function. Program execution begins and ends there.
 //
 
-#include <iostream>
-#include <string>
-#include <vector>
-#include <list>
-#include <chrono>
-#include <thread>
+#include "stdlib.h"
+#include "stdio.h"
 #define PI 3.14159265358979323846
-#include <cmath> 
+#include "math.h"
 #include "Rocket.h"
 
 using namespace std;
@@ -24,8 +20,10 @@ int main()
 {
     int tickIntervalMS = 500;
 
-    Game game;
-    Rocket rocket;
+    game_t game;
+    gameInit(&game);
+    rocket_t rocket;
+    rocketInit(&rocket);
 
     float psat = 0;
     float dd = 0;
@@ -35,7 +33,7 @@ int main()
     while (true) { 
 
         //Add together speeds and positions
-        rocket.speedUpdate(game.planetPos, game);
+        speedUpdate(&rocket, game.planetPos, game.planetRad);
         for (size_t i = 0; i < 2; i++)
         {
             game.planetPos[i] -= rocket.speed[i];
@@ -46,16 +44,18 @@ int main()
             float angle = atan2(game.planetPos[1], game.planetPos[0]);
             for (size_t i = 0; i < 2; i++)
             {
-                game.planetPos[i] -= cos(angle + (i * PI / 2))*0.1 * rocket.sign(game.planetPos[i]);
+                game.planetPos[i] -= cos(angle + (i * PI / 2))*0.1 * sign(game.planetPos[i]);
                 rocket.speed[i] = 0;
             }
         }
 
         //Displays data
-        cout << "Distances: " << game.planetPos[0] << ", " << game.planetPos[1] << "  Speed: " << rocket.speed[0] << "  Total Dist: " << dist(game.planetPos[1], game.planetPos[0]) << "  Deriv. of speed * 1000: " << ((dist(rocket.speed[1], rocket.speed[0]) - psat) - dd) * 1000 << std::endl;
+        //cout << "Distances: " << game.planetPos[0] << ", " << game.planetPos[1] << "  Speed: " << rocket.speed[0] << "  Total Dist: " << dist(game.planetPos[1], game.planetPos[0]) << "  Deriv. of speed * 1000: " << ((dist(rocket.speed[1], rocket.speed[0]) - psat) - dd) * 1000 << std::endl;
+        printf("Distances: %lf, %lf; Speed: %lf; Total Dist: %f; Deriv. of speed * 1000: %f\n", game.planetPos[0], game.planetPos[1], rocket.speed[0], dist(game.planetPos[1], game.planetPos[0]), ((dist(rocket.speed[1], rocket.speed[0]) - psat) - dd) * 1000);
         dd = dist(rocket.speed[1], rocket.speed[0]) - psat;
         psat = dist(rocket.speed[1], rocket.speed[0]); 
-        this_thread::sleep_for(std::chrono::milliseconds(tickIntervalMS));
+        wait(tickIntervalMS);
+        //this_thread::sleep_for(std::chrono::milliseconds(tickIntervalMS));
 
 
         //Display functionm, resolustion = 480, 240
@@ -64,20 +64,5 @@ int main()
         {
             screenDist[i] = game.planetPos[i] / game.zoom;
         }
-        RenderKSP(screenDist[0], screenDist[1], game.zoom, rocket.throttle, rocket. heading);
     }
 }
-
-
-
-
-
-
-// Run program: Ctrl + F5 or Debug > Start Without Debugging menu
-// Debug program: F5 or Debug > Start Debugging menu
-
-// Tips: 
-//   1. Use the Solution Explorer window to add/manage files
-//   2. Use the Team Explorer window to connect to source control
-//   3. Use the Output window to see build output and other messages
-//   4. Use the Error List window to view errors
