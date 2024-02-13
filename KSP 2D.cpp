@@ -58,13 +58,13 @@ int main()
         this_thread::sleep_for(std::chrono::milliseconds(tickIntervalMS));
 
 
-        //Display functionm, resolustion = 420, 272
+        //Display functionm, resolustion = 480, 240
         vector<float> screenDist;
         for (size_t i = 0; i < 2; i++)
         {
             screenDist[i] = game.planetPos[i] / game.zoom;
         }
-        void RenderKSP(screenDist[0], screenDist[1], game.planetRad / game.zoom);
+        RenderKSP(screenDist[0], screenDist[1], game.zoom, rocket.throttle, rocket. heading);
     }
 }
 
