@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.6.33829.357
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "KSP 2D", "KSP 2D.vcxproj", "{596ABB57-D15C-4135-BD4B-5A69C6192A55}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x64 = Debug|x64
+		Debug|x86 = Debug|x86
+		Release|x64 = Release|x64
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{596ABB57-D15C-4135-BD4B-5A69C6192A55}.Debug|x64.ActiveCfg = Debug|x64
+		{596ABB57-D15C-4135-BD4B-5A69C6192A55}.Debug|x64.Build.0 = Debug|x64
+		{596ABB57-D15C-4135-BD4B-5A69C6192A55}.Debug|x86.ActiveCfg = Debug|Win32
+		{596ABB57-D15C-4135-BD4B-5A69C6192A55}.Debug|x86.Build.0 = Debug|Win32
+		{596ABB57-D15C-4135-BD4B-5A69C6192A55}.Release|x64.ActiveCfg = Release|x64
+		{596ABB57-D15C-4135-BD4B-5A69C6192A55}.Release|x64.Build.0 = Release|x64
+		{596ABB57-D15C-4135-BD4B-5A69C6192A55}.Release|x86.ActiveCfg = Release|Win32
+		{596ABB57-D15C-4135-BD4B-5A69C6192A55}.Release|x86.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {68884E5D-5E8B-4993-9537-1E4BD5DE6B64}
+	EndGlobalSection
+EndGlobal
