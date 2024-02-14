@@ -24,6 +24,7 @@
     <ProjectGuid>{596abb57-d15c-4135-bd4b-5a69c6192a55}</ProjectGuid>
     <RootNamespace>KSP2D</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+    <ProjectName>KSP 2DC</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -127,11 +128,11 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="KSP 2D.cpp" />
-    <ClCompile Include="Rocket.cpp" />
+    <ClInclude Include="Rocket.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Rocket.h" />
+    <ClCompile Include="KSP 2D.c" />
+    <ClCompile Include="Rocket.c" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

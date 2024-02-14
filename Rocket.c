@@ -1,11 +1,11 @@
 #include "Rocket.h"
 
 float dist(float x, float y) {
-    return sqrt(pow(x, 2) + pow(y, 2));
+    return sqrt(square(x) + square(y));
 }
 
 float aero(rocket_t* rocket, float speed, float height) {  //Linear atmopshere fall off            Temp Value below
-    if (height <= atmoHeight) return pow(speed, 2) * rocket->dragCeo * (1 - height / atmoHeight) * 0.1;
+    if (height <= atmoHeight) return pow(speed, 2) * rocket->dragCeo * square(1 - height / atmoHeight) * 0.1;
     else return 0;
 }
 
@@ -29,25 +29,24 @@ float gravity(double r2, float trig, int i) {
 
 }
 
-vector_t speedUpdate(rocket_t* rocket, double planPos[2], float planetRad) { //Updates speed according to engines and gravity, then returns those values. 
-    double distance_squared = square(dist(planPos[1], planPos[0]));  //Takes in x and y distances to gravitation attractor and sqaures them for gravity
-    //if (distance_squared == 0) { cout << "Error:distance_sqaured_speedUpdate=0" << endl; } //Error if distance ever equals 0
-    float distance = dist(planPos[1], planPos[0]);
+void speedUpdate(rocket_t* rocket, float x, float y, float planetRad) { //Updates speed according to engines and gravity, then returns those values. 
+    double distance_squared = square(dist(y, x));  //Takes in x and y distances to gravitation attractor and sqaures them for gravity
+    float distance = dist(y, x);
 
-    for (size_t i = 0; i < 2; i++) //Loops through, finding angles to use in gravity function
+    for (int i = 0; i < 2; i++) //Loops through, finding angles to use in gravity function
     {
         float trig;
         if (i == 1) {
-            trig = asin(planPos[1] / distance);
+            trig = asin(y / distance);
         }
         else {
-            trig = acos(planPos[0] / distance);
+            trig = acos(x / distance);
         }
 
-        rocket->speed[i] += cos((heading * (PI / 180)) - i * (PI / 2)) * accel() + gravity(distance_squared, trig, i);
-        rocket->speed[i] -= aero(rocket->speed[i], (dist(planPos[0], planPos[1]) - planetRad)) * sign(rocket->speed[i]); //Aerodyamics
+        rocket->speed[i] += cos((rocket->heading * (PI / 180)) - i * (PI / 2)) * accel(rocket) + gravity(distance_squared, trig, i);
+        rocket->speed[i] -= aero(rocket, rocket->speed[i], (dist(x, y) - planetRad)) * sign(rocket->speed[i]); //Aerodyamics
+        //printf("%lf", rocket->speed[i]);
     }
-    return speed;
 }
 
 void updateHeading(rocket_t* rocket, float value) {
@@ -66,9 +65,41 @@ void updateThrottle(rocket_t* rocket, float value) {
 
 //Gives sign of the value
 double sign(double x) {
-    return (x > 0) - (x < 0)
+    return (x > 0) - (x < 0);
 }
 
 void rocketInit(rocket_t* rocket) {
-    // init your default values here lucas
+    rocket->engines[0][0] = "test";
+    rocket->engines[0][1] = "230";
+    rocket->engines[0][2] = "2";
+    rocket->engines[0][3] = "2";
+    rocket->engines[1][0] = "test2";
+    rocket->engines[1][1] = "350";
+    rocket->engines[1][2] = "3.25";
+    rocket->engines[1][3] = "0.3";
+
+    rocket->engSelect = 1;
+
+    rocket->speed[0] = 0;
+    rocket->speed[1] = 0;
+
+    rocket->heading = 0;
+    rocket->throttle = 0;
+    rocket->fuel = 100;
+    rocket->mass = 10 + atof(rocket->engines[rocket->engSelect][2]);  //Engine mass in tons + vehicle mass 
+    rocket->thrust = atof(rocket->engines[rocket->engSelect][3]) * 1000000000;  //Engine Thrust, value to compinate for MN
+    rocket->exhV = atof(rocket->engines[rocket->engSelect][1]); //Exhaust Velociy of Engine in m/sec
+    rocket->massF = rocket->thrust / rocket->exhV; //Massflow of Engine in kg/sec
+    rocket->dragCeo = 1; //Of total rocket, implemetation of calculator later
+}
+
+void gameInit(game_t* game) {
+    game->planetPos[0] = -10;
+    game->planetPos[1] = 340;
+    game->zoom = 1;
+    game->planetRad = 300;
+}
+
+bool inOrbit(float height, float mass, float speed) {
+    return (sqrt((G * mass) / height) <= speed);
 }

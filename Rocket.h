@@ -5,11 +5,14 @@
 #define PMass 1000
 #define atmoHeight 30
 #define square(value) pow(value, 2)
-using namespace std;
+#include "math.h"
+#include <windows.h>
+#include "stdbool.h"
+#include "stdlib.h"
 
 typedef struct {
     double planetPos[2];
-    float zoom;                                     //Zoom of ten, a distance of 100 = 10
+    float zoom;           //Zoom of ten, a distance of 100 = 10
     float planetRad;
 } game_t;
 
@@ -30,7 +33,7 @@ typedef struct {
     double speed[2];
 } rocket_t;
 
-vector_t speedUpdate(rocket_t* rocket, double planPos[2]);
+void speedUpdate(rocket_t* rocket, float x, float y, float planetRad);
 float dist(float x, float y);
 float aero(rocket_t* rocket, float speed, float height);
 float accel(rocket_t* rocket);
@@ -41,6 +44,8 @@ double sign(double x);
 
 void rocketInit(rocket_t* rocket);
 void gameInit(game_t* game);
+
+bool inOrbit(float height, float mass, float speed);
 
 /*
 class Rocket {
