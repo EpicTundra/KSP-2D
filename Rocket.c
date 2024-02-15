@@ -103,3 +103,7 @@ void gameInit(game_t* game) {
 bool inOrbit(float height, float mass, float speed) {
     return (sqrt((G * mass) / height) <= speed);
 }
+
+float deltaV (float vex, float massW, float massD){
+    return vex * (log(massW / massD) / log(2.7182818284))
+}
