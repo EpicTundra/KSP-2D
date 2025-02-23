@@ -1,0 +1,11 @@
+﻿  Util.c
+C:\Users\Red_Rock\Code\KSP 2D C\SDL KSP 2D made in C\src\Util.c(14,9): warning C4244: 'return': conversion from 'double' to 'float', possible loss of data
+C:\Users\Red_Rock\Code\KSP 2D C\SDL KSP 2D made in C\src\Util.c(47,15): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+C:\Users\Red_Rock\Code\KSP 2D C\SDL KSP 2D made in C\src\Util.c(48,23): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+C:\Users\Red_Rock\Code\KSP 2D C\SDL KSP 2D made in C\src\Util.c(49,23): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+C:\Users\Red_Rock\Code\KSP 2D C\SDL KSP 2D made in C\src\Util.c(58,19): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+C:\Users\Red_Rock\Code\KSP 2D C\SDL KSP 2D made in C\src\Util.c(59,19): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+C:\Users\Red_Rock\Code\KSP 2D C\SDL KSP 2D made in C\src\Util.c(74,19): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+C:\Users\Red_Rock\Code\KSP 2D C\SDL KSP 2D made in C\src\Util.c(75,19): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+C:\Users\Red_Rock\Code\KSP 2D C\SDL KSP 2D made in C\src\Util.c(139,16): warning C4244: 'return': conversion from 'double' to 'float', possible loss of data
+  SDL KSP 2D made in C.vcxproj -> C:\Users\Red_Rock\Code\KSP 2D C\SDL KSP 2D made in C\x64\Debug\SDL KSP 2D made in C.exe
