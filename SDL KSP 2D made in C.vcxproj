@@ -152,13 +152,12 @@
     <ClCompile Include="src\Util.c" />
   </ItemGroup>
   <ItemGroup>
+    <None Include=".gitignore" />
     <None Include="lib\x64\SDL2.dll" />
     <None Include="SDL2.dll" />
   </ItemGroup>
   <ItemGroup>
     <Library Include="lib\x64\SDL2.lib" />
-    <Library Include="lib\x64\SDL2main.lib" />
-    <Library Include="lib\x64\SDL2test.lib" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
@@ -246,13 +245,13 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>C:\Users\Red_Rock\Code\KSP 2D C\SDL KSP 2D made in C\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>./include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard_C>stdc11</LanguageStandard_C>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>lib/x64/SDL2.lib;lib/x64/SDL2main.lib;lib/x64/SDL2test.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>lib/x64/SDL2.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">

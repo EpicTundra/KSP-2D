@@ -1,6 +1,6 @@
 #include "KSP2D.h"
 #include "SDL.h"
-#undef main
+#undef main 
 
 /*
 void on_center_button() {
@@ -81,4 +81,6 @@ int main(int argc, char** argv) {
             SDL_Delay(tFPS);
         }//if we need to delay, and we dont have make up time, then delay
     }
+
+    return 0;
 }

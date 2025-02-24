@@ -408,10 +408,9 @@
   <ItemGroup>
     <None Include="lib\x64\SDL2.dll" />
     <None Include="SDL2.dll" />
+    <None Include=".gitignore" />
   </ItemGroup>
   <ItemGroup>
     <Library Include="lib\x64\SDL2.lib" />
-    <Library Include="lib\x64\SDL2main.lib" />
-    <Library Include="lib\x64\SDL2test.lib" />
   </ItemGroup>
 </Project>
