@@ -13,6 +13,7 @@
 float clamp(float d, float min, float max);
 double sign(double x);
 float dist(float x, float y);
+float crossproduct(float a[], float b[]);
 void drawRect(float x, float y, float height, float width, float angle, float zoom, float r, float g, float b, bool inGameSpace);
 void drawEllipse(float major, float minor, float angle, float focalx, float focaly, float zoom, int pointcount, float r, float g, float b, bool hollow);
 void drawCircle(float radius, float cx, float cy, float zoom, int pointcount, float r, float g, float b);

@@ -1,15 +1,16 @@
 #pragma once
 
 #define PI 3.14159265358979323846
+#define E 2.718281828459045
 #define atmoHeight 30
 #include "Parts.h"
 
 typedef struct {
-    double planetPos[2];
+    double planetPos[2];  //In relation to the craft, a negative x will render it to the right.
     float zoom;           //Zoom of ten, a distance of 100 = 10
     float planetRad;
     float planetMass;
-    float renderPos[4]; //major, minor, e, and argument of periapsis
+    float orbitRenderPos[4]; //major, minor, e, and argument of periapsis
     int mode; //0 = gameplay, 1 = map
     bool pressingModeSwitch;
 } game_t;

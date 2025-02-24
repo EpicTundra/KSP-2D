@@ -119,7 +119,6 @@
   <ItemGroup>
     <ClCompile Include="src\KSP2D.c" />
     <ClCompile Include="src\main.c" />
-    <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\Parts.c" />
     <ClCompile Include="src\renderer.c" />
     <ClCompile Include="src\Rocket.c" />

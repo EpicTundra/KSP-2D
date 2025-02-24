@@ -14,6 +14,10 @@ float dist(float x, float y) {
 	return sqrt(square(x) + square(y));
 }
 
+float crossproduct(float a[], float b[]) {
+    return a[0] * b[1] - a[1] * b[0];
+}
+
 void drawRect(float cx, float cy, float height, float width, float angle, float zoom, float r, float g, float b, bool inGameSpace) {
     float mod = 1;
     if (inGameSpace) mod = METER2GL;

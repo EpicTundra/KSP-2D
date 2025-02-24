@@ -1,6 +1,6 @@
 #include "KSP2D.h"
 #include "SDL.h"
-#undef main 
+#undef main
 
 /*
 void on_center_button() {
@@ -35,7 +35,6 @@ int main(int argc, char** argv) {
     if ((screen = SDL_GetWindowSurface(window)) == -0) return 1;
 	game_init();
 
-    Uint8* keyboard = SDL_GetKeyboardState(NULL);//TEMMPPP DELETE LATER!!!!!!!
 
     unsigned int frames = 0;
     unsigned int tNow = SDL_GetTicks();

@@ -104,20 +104,29 @@ void gameInit(game_t* game) {
     game->planetMass = 200000;
     for (size_t y = 0; y < 4; y++)
     {
-        game->renderPos[y] = 0;
+        game->orbitRenderPos[y] = 0;
     }
     game->mode = 0;
     game->pressingModeSwitch = false;
 }
 
-void calcOrbit(game_t* game, rocket_t* rocket) { //For Change using vis viva equation
+void calcOrbit(game_t* game, rocket_t* rocket) { //Finds orbitals paramaters
     float mu = G * game->planetMass;
     float distance = dist(game->planetPos[0], game->planetPos[1]);
     float velocity = sqrt(square(rocket->speed[0]) + square(rocket->speed[1]));
 
-    float major = 2 * (mu * distance) / ((2 * mu) - (distance * square(velocity)));
+    float major = 1 / (2 / distance - (square(velocity) / mu));//Derived from the vis viva equation
 
-    float e = fabs( - 1 + square(velocity) * distance / mu);//sqrt((4 * distance * square(velocity) / mu) - square(distance * square(velocity) / mu) - 3)
+
+    //Find eccentricity of orbit from givens
+    float h = -(game->planetPos[0] * rocket->speed[1]) - (game->planetPos[1] * rocket->speed[0]); //Positive means counter clockwise roation
+
+    float eccentricityVector[2];
+    eccentricityVector[0] = (h * rocket->speed[1]) / mu + ((game->planetPos[0]) / distance); //Very hard equation math thinger.  Solve with gpt equation
+    eccentricityVector[1] = (-h * rocket->speed[0]) / mu + ((game->planetPos[1]) / distance);
+
+    float e = dist(eccentricityVector[0], eccentricityVector[1]);
+
 
     float minor = major * (1 - square(e));
 
@@ -125,16 +134,14 @@ void calcOrbit(game_t* game, rocket_t* rocket) { //For Change using vis viva equ
     float x = fabs((game->planetPos[0] * square(rocket->speed[0]) / mu));
     float periArg = atan2(y, x);
 
-    game->renderPos[0] = major;
-    game->renderPos[1] = minor;
-    game->renderPos[2] = e;
-    game->renderPos[3] = periArg * (1 / DEGREETORAD) + (M_PI / 2);
-
-
+    game->orbitRenderPos[0] = major;
+    game->orbitRenderPos[1] = minor;
+    game->orbitRenderPos[2] = e;
+    game->orbitRenderPos[3] = periArg * (1 / DEGREETORAD) + (M_PI / 2);
 }
 
 void disOrb(game_t game, rocket_t rocket, float zoom, game_t* gamestr) { //DEPRECATED. displays future orbital trajectory
-    float(*renderPositions)[301][3] = gamestr->renderPos;
+    float(*renderPositions)[301][3] = gamestr->orbitRenderPos;
 
     for (size_t i = 0; i < 301; i++)
     {
@@ -259,6 +266,7 @@ void disOrb(game_t game, rocket_t rocket, float zoom, game_t* gamestr) { //DEPRE
         float angle2 = atan2f(fFoward[0], -fFoward[1]);
         float angleAverage = (angle + angle2) / 2;
         (*renderPositions)[0][2] = angleAverage * 180 / PI;
+
 
         if (dist(apoapsis[0], apoapsis[1]) > dist(originalPos[0], originalPos[1])) {
             (*renderPositions)[300][0] = apoapsis[0];
