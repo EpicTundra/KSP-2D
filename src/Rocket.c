@@ -129,7 +129,7 @@ void calcOrbit(game_t* game, rocket_t* rocket) { //Finds orbitals paramaters
     float trueAnom = acosf( (square(2 * major * e) + square(distance) - square(2 * major - distance)) / (4 * major * e * distance) );
 
     float periArg;
-    float rocketAngle = atan2f(-game->planetPos[1], -game->planetPos[0]);
+    float rocketAngle = atan2f(-game->planetPos[1], -game->planetPos[0]) + PI/2;
 
     float futurePos = square(rocket->speed[0] - game->planetPos[0]) + square(rocket->speed[1] - game->planetPos[1]);
     if (futurePos > square(distance)) {
@@ -141,11 +141,10 @@ void calcOrbit(game_t* game, rocket_t* rocket) { //Finds orbitals paramaters
     else periArg = 0;
     
 
-    //float periArg = atan2(y, );
 
     game->orbitRenderPos[0] = major;
     game->orbitRenderPos[1] = minor;
-    game->orbitRenderPos[2] = e;
+    game->orbitRenderPos[2] = trueAnom;
     game->orbitRenderPos[3] = periArg;
 }
 
@@ -288,7 +287,7 @@ void disOrb(game_t game, rocket_t rocket, float zoom, game_t* gamestr) { //DEPRE
 
 
 void renderOrbit(game_t *game, float zoom) { //Renders orbit
-    drawEllipse(game->orbitRenderPos[0], game->orbitRenderPos[1], game->orbitRenderPos[3], game->planetPos[0], game->planetPos[1], zoom, 100, 1, 1, 1, false);
+     drawEllipse(game->orbitRenderPos[0], game->orbitRenderPos[1], game->orbitRenderPos[3] + PI/2, game->planetPos[0], game->planetPos[1], zoom, 100, 1, 1, 1, false);
 
 }
 /*

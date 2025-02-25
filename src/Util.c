@@ -49,14 +49,16 @@ void drawRect(float cx, float cy, float height, float width, float angle, float 
 void drawEllipse(float major, float minor, float angle, float focalx, float focaly, float zoom, int pointcount, float r, float g, float b, bool dashed)//Give one foci to draw ellipse
 {
     float c = sqrt(major * major - minor * minor); // Focal distance
+    float cx = focalx + (sin(angle) * c);
+    float cy = focaly - (cos(angle) * c);
 
     glPushMatrix();
 
     // Step 1: Move to the focal position
-    glTranslatef((focalx + c) * METER2GL * zoom, focaly * METER2GL * zoom, 0.0);
+    glTranslatef(focalx * METER2GL * zoom, focaly * METER2GL * zoom, 0.0);
 
     // Step 2: Rotate the entire coordinate system
-    glRotatef(angle / DEGREETORAD, 0.0, 0.0, 1.0);
+    //glRotatef(angle * RAD2DEG, 0.0, 0.0, 1.0);
 
     // Step 3: Scale for zoom
     glScalef(zoom, zoom, 1.0);
@@ -66,12 +68,16 @@ void drawEllipse(float major, float minor, float angle, float focalx, float foca
     glColor3f(r, g, b);
 
     for (int i = 0; i < pointcount; i++) {
-        float theta = 2.0 * PI * i / pointcount;
-        float x = cos(theta) * major;
-        float y = sin(theta) * minor;
+        float t = 2.0 * PI * i / pointcount;
+
+        float x = cos(t) * major - c;
+        float y = sin(t) * minor;
+
+        float rx = x * cos(angle) - y * sin(angle);
+        float ry = x * sin(angle) + y * cos(angle);
 
         // No need to manually rotate; OpenGL handles it
-        glVertex2f(x * METER2GL, y * METER2GL);
+        glVertex2f(rx * METER2GL, ry * METER2GL);
     }
 
     glEnd();

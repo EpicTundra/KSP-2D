@@ -8,6 +8,7 @@
 #define PI 3.14159265358979323846
 #define METER2GL (1.0f / 240.0f)
 #define DEGREETORAD 0.01745329251
+#define RAD2DEG 57.2957795131
 #define G 1
 
 float clamp(float d, float min, float max);
