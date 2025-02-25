@@ -48,7 +48,7 @@ float deltaV(float vex, float massW, float massD);
 
 void calcOrbit(game_t* game, rocket_t* rocket);
 void disOrb(game_t game, rocket_t rocket, float zoom, game_t *gamestr); //DEPRECATED Calculates for renderOrb, float (*renderPositions)[101][3] 
-void renderOrbit(float (*renderPositions)[301][3], float zoom, float originalPosx, float originalPosy, rocket_t *rocket, game_t *game); //renders orbit
+void renderOrbit(game_t* game, float zoom); //renders orbit
 
 int tNow;
 int tLast;

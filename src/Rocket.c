@@ -124,20 +124,29 @@ void calcOrbit(game_t* game, rocket_t* rocket) { //Finds orbitals paramaters
     float e = sqrt(1 - (square(h) / (mu * major)));
     float minor = major * (1 - square(e));
 
+
     //Find argument of periapsis
     float trueAnom = acosf( (square(2 * major * e) + square(distance) - square(2 * major - distance)) / (4 * major * e * distance) );
 
+    float periArg;
+    float rocketAngle = atan2f(-game->planetPos[1], -game->planetPos[0]);
+
     float futurePos = square(rocket->speed[0] - game->planetPos[0]) + square(rocket->speed[1] - game->planetPos[1]);
+    if (futurePos > square(distance)) {
+        periArg = rocketAngle + trueAnom;
+    }
+    else if (futurePos < square(distance)) {
+        periArg = rocketAngle - trueAnom;
+    }
+    else periArg = 0;
     
-    //if true anomly up or down
 
     //float periArg = atan2(y, );
-    float periArg = 0;
 
     game->orbitRenderPos[0] = major;
     game->orbitRenderPos[1] = minor;
     game->orbitRenderPos[2] = e;
-    game->orbitRenderPos[3] = trueAnom;//periArg * (1 / DEGREETORAD) + (M_PI / 2)
+    game->orbitRenderPos[3] = periArg;
 }
 
 void disOrb(game_t game, rocket_t rocket, float zoom, game_t* gamestr) { //DEPRECATED. displays future orbital trajectory
@@ -273,12 +282,17 @@ void disOrb(game_t game, rocket_t rocket, float zoom, game_t* gamestr) { //DEPRE
             (*renderPositions)[300][1] = apoapsis[1];
         }
 
-        renderOrbit(renderPositions, zoom, originalPos[0], originalPos[1], &rocket, &game); //Renders Orbit now
+        //renderOrbit(renderPositions, zoom, originalPos[0], originalPos[1], &rocket, &game); //Renders Orbit now
     }
 }
 
 
-void renderOrbit(float (*renderPositions)[301][3], float zoom, float originalPosx, float originalPosy, rocket_t *rocket, game_t *game) { //Renders orbit
+void renderOrbit(game_t *game, float zoom) { //Renders orbit
+    drawEllipse(game->orbitRenderPos[0], game->orbitRenderPos[1], game->orbitRenderPos[3], game->planetPos[0], game->planetPos[1], zoom, 100, 1, 1, 1, false);
+
+}
+/*
+* void renderOrbit(float (*renderPositions)[301][3], float zoom, float originalPosx, float originalPosy, rocket_t *rocket, game_t *game) { //Renders orbit
     bool render = true;
     int count = 0;
     while (render) { //Renders line
@@ -294,3 +308,5 @@ void renderOrbit(float (*renderPositions)[301][3], float zoom, float originalPos
         glColor3f(1.0f, 1.0f, 1.0f);
     }
 }
+
+*/
