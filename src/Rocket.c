@@ -102,7 +102,7 @@ void gameInit(game_t* game) {
     game->zoom = 4;
     game->planetRad = 300;
     game->planetMass = 200000;
-    for (size_t y = 0; y < 4; y++)
+    for (size_t y = 0; y < 4; y++) //Just so doesn't spew errors
     {
         game->orbitRenderPos[y] = 0;
     }
@@ -115,29 +115,29 @@ void calcOrbit(game_t* game, rocket_t* rocket) { //Finds orbitals paramaters
     float distance = dist(game->planetPos[0], game->planetPos[1]);
     float velocity = sqrt(square(rocket->speed[0]) + square(rocket->speed[1]));
 
+    //Is actually semi major...
     float major = 1 / (2 / distance - (square(velocity) / mu));//Derived from the vis viva equation
 
 
     //Find eccentricity of orbit from givens
-    float h = -(game->planetPos[0] * rocket->speed[1]) - (game->planetPos[1] * rocket->speed[0]); //Positive means counter clockwise roation
-
-    float eccentricityVector[2];
-    eccentricityVector[0] = (h * rocket->speed[1]) / mu + ((game->planetPos[0]) / distance); //  Solve with gpt equation
-    eccentricityVector[1] = (-h * rocket->speed[0]) / mu + ((game->planetPos[1]) / distance);
-
-    float e = dist(eccentricityVector[0], eccentricityVector[1]);
-
-
+    float h = -game->planetPos[0] * rocket->speed[1] + (game->planetPos[1] * rocket->speed[0]); //Positive means counter clockwise roation
+    float e = sqrt(1 - (square(h) / (mu * major)));
     float minor = major * (1 - square(e));
 
-    float y = fabs((game->planetPos[1] * square(rocket->speed[1]) / mu));
-    float x = fabs((game->planetPos[0] * square(rocket->speed[0]) / mu));
-    float periArg = atan2(y, x);
+    //Find argument of periapsis
+    float trueAnom = acosf( (square(2 * major * e) + square(distance) - square(2 * major - distance)) / (4 * major * e * distance) );
+
+    float futurePos = square(rocket->speed[0] - game->planetPos[0]) + square(rocket->speed[1] - game->planetPos[1]);
+    
+    //if true anomly up or down
+
+    //float periArg = atan2(y, );
+    float periArg = 0;
 
     game->orbitRenderPos[0] = major;
     game->orbitRenderPos[1] = minor;
     game->orbitRenderPos[2] = e;
-    game->orbitRenderPos[3] = periArg * (1 / DEGREETORAD) + (M_PI / 2);
+    game->orbitRenderPos[3] = trueAnom;//periArg * (1 / DEGREETORAD) + (M_PI / 2)
 }
 
 void disOrb(game_t game, rocket_t rocket, float zoom, game_t* gamestr) { //DEPRECATED. displays future orbital trajectory

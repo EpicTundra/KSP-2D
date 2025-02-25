@@ -118,7 +118,7 @@ void game_draw() {
         rendererDrawSprite(planet_sprite, camera);
         rendererDrawSprite(rocket_sprite, camera);
 
-        telemetryRender(true);
+        telemetryRender(true);//true value means currently shows telemetry
         break;
 
 
@@ -215,7 +215,7 @@ void telemetryRender(bool mapView) {
 
     if (mapView) { //Only when in map view
         sprintf(fuelText, "Fuel: %f", game.orbitRenderPos[2]);
-        sprintf(distText, "Dist: %f", dist(game.planetPos[1], game.planetPos[0]));
+        sprintf(distText, "Dist: %f", game.orbitRenderPos[3]);//dist(game.planetPos[1], game.planetPos[0])
 
         glDrawText((unsigned char*)distText, 10, 10, 0xffffff, 0);
         glDrawText((unsigned char*)fuelText, 10, 30, 0xffffff, 0);
