@@ -122,7 +122,7 @@ void calcOrbit(game_t* game, rocket_t* rocket) { //Finds orbitals paramaters
     float h = -(game->planetPos[0] * rocket->speed[1]) - (game->planetPos[1] * rocket->speed[0]); //Positive means counter clockwise roation
 
     float eccentricityVector[2];
-    eccentricityVector[0] = (h * rocket->speed[1]) / mu + ((game->planetPos[0]) / distance); //Very hard equation math thinger.  Solve with gpt equation
+    eccentricityVector[0] = (h * rocket->speed[1]) / mu + ((game->planetPos[0]) / distance); //  Solve with gpt equation
     eccentricityVector[1] = (-h * rocket->speed[0]) / mu + ((game->planetPos[1]) / distance);
 
     float e = dist(eccentricityVector[0], eccentricityVector[1]);
