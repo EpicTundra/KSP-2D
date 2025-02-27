@@ -79,7 +79,7 @@ void rocketInit(rocket_t* rocket) {
 
     rocket->size = 6.0f;
 
-    rocket->speed[0] = 0;
+    rocket->speed[0] = 22;//changing
     rocket->speed[1] = 0;
 
     rocket->calcOrbit = 0;
@@ -98,7 +98,7 @@ void rocketInit(rocket_t* rocket) {
 
 void gameInit(game_t* game) {
     game->planetPos[0] = -10;
-    game->planetPos[1] = 340;
+    game->planetPos[1] = 380;
     game->zoom = 4;
     game->planetRad = 300;
     game->planetMass = 200000;
@@ -131,7 +131,7 @@ void calcOrbit(game_t* game, rocket_t* rocket) { //Finds orbitals paramaters
     float periArg;
     float rocketAngle = atan2f(-game->planetPos[1], -game->planetPos[0]) + PI/2;
 
-    float futurePos = square(rocket->speed[0] - game->planetPos[0]) + square(rocket->speed[1] - game->planetPos[1]);
+    float futurePos = square(rocket->speed[0] * 0.001 - game->planetPos[0]) + square(rocket->speed[1] * 0.001- game->planetPos[1]);
     if (futurePos > square(distance)) {
         periArg = rocketAngle + trueAnom;
     }
@@ -144,7 +144,7 @@ void calcOrbit(game_t* game, rocket_t* rocket) { //Finds orbitals paramaters
 
     game->orbitRenderPos[0] = major;
     game->orbitRenderPos[1] = minor;
-    game->orbitRenderPos[2] = trueAnom;
+    game->orbitRenderPos[2] = e;
     game->orbitRenderPos[3] = periArg;
 }
 
@@ -286,9 +286,11 @@ void disOrb(game_t game, rocket_t rocket, float zoom, game_t* gamestr) { //DEPRE
 }
 
 
-void renderOrbit(game_t *game, float zoom) { //Renders orbit
-     drawEllipse(game->orbitRenderPos[0], game->orbitRenderPos[1], game->orbitRenderPos[3] + PI/2, game->planetPos[0], game->planetPos[1], zoom, 100, 1, 1, 1, false);
-
+void renderOrbit(game_t *game, float zoom, rocket_t *rocket) { //Renders orbit
+     drawEllipse(game->orbitRenderPos[0], game->orbitRenderPos[1], game->orbitRenderPos[3] - PI / 2, game->planetPos[0], game->planetPos[1], zoom, 100, 1, 1, 1, false);
+     // - ((game->orbitRenderPos[0] - game->orbitRenderPos[1]) * 0.4)
+     //drawRect(game->planetPos[0] / 2, game->planetPos[1] / 2, game->orbitRenderPos[0], 7, atan2f(-game->planetPos[1], -game->planetPos[0]) / DEGREETORAD + 90, zoom, 1, 1, 1, true);
+     //drawCircle(game->orbitRenderPos[0] + (game->orbitRenderPos[0] * game->orbitRenderPos[2]), game->planetPos[0], game->planetPos[1], zoom, 100, 1, 190, 1);
 }
 /*
 * void renderOrbit(float (*renderPositions)[301][3], float zoom, float originalPosx, float originalPosy, rocket_t *rocket, game_t *game) { //Renders orbit

@@ -132,8 +132,8 @@ void game_draw() {
 
         //for new orbit code have a variable with the rocket that is set to true when engines fire and will then recalculate orbit, but doesn't otherwise do anything
         calcOrbit(&game, &rocket);
-        if (game.orbitRenderPos[2] < 1){
-            renderOrbit(&game, camera.zoom);
+        if (game.orbitRenderPos[2] <= 1){
+            renderOrbit(&game, camera.zoom, &rocket);
         }
         //drawEllipse(game.orbitRenderPos[0], game.orbitRenderPos[1], game.orbitRenderPos[3], game.planetPos[0], game.planetPos[1], camera.zoom, 100, 1, 1, 1, false);
 
@@ -217,8 +217,8 @@ void telemetryRender(bool mapView) {
 
 
     if (mapView) { //Only when in map view
-        sprintf(fuelText, "Fuel: %f", game.orbitRenderPos[3]);
-        sprintf(distText, "Dist: %f", game.orbitRenderPos[2]);//dist(game.planetPos[1], game.planetPos[0])
+        sprintf(fuelText, "Fuel: %f", game.orbitRenderPos[0] + (game.orbitRenderPos[0] * game.orbitRenderPos[2]));
+        sprintf(distText, "Dist: %f", dist(game.planetPos[1], game.planetPos[0]));//dist(game.planetPos[1], game.planetPos[0])
 
         glDrawText((unsigned char*)distText, 10, 10, 0xffffff, 0);
         glDrawText((unsigned char*)fuelText, 10, 30, 0xffffff, 0);
