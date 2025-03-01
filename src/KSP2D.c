@@ -124,6 +124,10 @@ void game_draw() {
 
     case 1: //Map mode
         camera.zoom = game.zoom * 0.1f;
+
+        calcOrbit(&game, &rocket);
+        renderOrbit(&game, camera.zoom, &rocket);
+
         planet_sprite.scale = (vector_t){ 3.125, 3.125 }; //By default sprite renders at half the height of screen (0.5, -0.05)
         planet_sprite.dstrect.x = game.planetPos[0] / 240;
         planet_sprite.dstrect.y = game.planetPos[1] / 240;
@@ -131,8 +135,7 @@ void game_draw() {
         rendererDrawSprite(planet_sprite, camera);
 
         //for new orbit code have a variable with the rocket that is set to true when engines fire and will then recalculate orbit, but doesn't otherwise do anything
-        calcOrbit(&game, &rocket);
-        renderOrbit(&game, camera.zoom, &rocket);
+
         
         //drawEllipse(game.orbitRenderPos[0], game.orbitRenderPos[1], game.orbitRenderPos[3], game.planetPos[0], game.planetPos[1], camera.zoom, 100, 1, 1, 1, false);
 

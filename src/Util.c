@@ -63,8 +63,8 @@ void drawEllipse(float major, float minor, float angle, float focalx, float foca
     // Step 3: Scale for zoom
     glScalef(zoom, zoom, 1.0);
 
-    // Start drawing the ellipse
     glBegin(GL_LINE_LOOP);
+
     glColor3f(r, g, b);
 
     float cs = cos(angle); //Cosine
@@ -104,15 +104,15 @@ void drawHyperbola(float major, float minor, float angle, float focalx, float fo
     glScalef(zoom, zoom, 1.0);
 
     // Start drawing the ellipse
-    glBegin(GL_LINES);
+    glBegin(GL_LINE_STRIP);
     glColor3f(r, g, b);
 
     float cs = cos(angle); //Cosine
     float sn = sin(angle); //Sin
-    float halfPi = PI * 0.5 - 0.1;
+    float halfPi = PI * 0.5;
 
-    for (int i = 0; i < pointcount; i++) {
-        float t = PI * (pointcount / (pointcount - 10)) * i / pointcount - halfPi  ;
+    for (int i = 0; i < (pointcount -2); i++) {
+        float t = PI * (i + 1) / (pointcount) - halfPi;
 
         float x = major / cos(t) - c;
         float y = minor * tan(t);

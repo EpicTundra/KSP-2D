@@ -130,16 +130,25 @@ void calcOrbit(game_t* game, rocket_t* rocket) { //Finds orbitals paramaters
 
 
         //Find argument of periapsis    True Anomoly gives relative angle spacecraft in to apoapsis
-        float trueAnom = acosf((square(2 * major * e) + square(distance) - square(2 * major - distance)) / (4 * major * e * distance));
+        float trueAnom = acosf( (major * (1 - square(e)) / distance - 1) / e);//(square(2 * major * e) + square(distance) - square(2 * major - distance)) / (4 * major * e * distance)
 
         float periArg;
         float rocketAngle = atan2f(-game->planetPos[1], -game->planetPos[0]) + PI / 2;
+        float futurePos = square(rocket->speed[0] * 0.001 - game->planetPos[0]) + square(rocket->speed[1] * 0.001 - game->planetPos[1]);
+        float squareD = square(distance);
+
         if (h < 0){
-            float futurePos = square(rocket->speed[0] * 0.001 - game->planetPos[0]) + square(rocket->speed[1] * 0.001 - game->planetPos[1]);
-            if (futurePos > square(distance)) {
+            if (futurePos > squareD) {
+                periArg = rocketAngle + trueAnom;
+            }
+            else periArg = rocketAngle - trueAnom;
+        }
+        else {
+            if (futurePos > squareD) {
                 periArg = rocketAngle - trueAnom;
-            } else periArg = rocketAngle + trueAnom;
-        } else periArg = rocketAngle + trueAnom;
+            }
+            else periArg = rocketAngle + trueAnom;
+        }
 
         
         //Cast values to orbit render
@@ -159,7 +168,21 @@ void calcOrbit(game_t* game, rocket_t* rocket) { //Finds orbitals paramaters
         float periArg;
         float rocketAngle = atan2f(-game->planetPos[1], -game->planetPos[0]) + PI / 2;
 
-        periArg = rocketAngle + v;
+        //Check if periapsis is ahead of or behind us.
+        float futurePos = square(rocket->speed[0] * 0.001 - game->planetPos[0]) + square(rocket->speed[1] * 0.001 - game->planetPos[1]);
+
+        if (h < 0) {
+            if (futurePos > square(distance)) {
+                periArg = rocketAngle + v;
+            }
+            else periArg = rocketAngle - v;
+        }
+        else {
+            if (futurePos > square(distance)) {
+                periArg = rocketAngle - v;
+            }
+            else periArg = rocketAngle + v;
+        }
 
         game->orbitRenderPos[0] = fabs(major);
         game->orbitRenderPos[1] = minor;
@@ -167,8 +190,7 @@ void calcOrbit(game_t* game, rocket_t* rocket) { //Finds orbitals paramaters
         game->orbitRenderPos[3] = periArg;
     } else
     { //If parabolic. Highly unlikely and this should atleast prevent crashes.
-        game->planetPos[0] += 0.0001;
-            calcOrbit(game, rocket);
+        printf("Debug message: %s\n", "Wow it's parabolic! That's crazy! If you're seeing this, the game probably crashed because of this!");
     }
 }
 
@@ -313,8 +335,8 @@ void disOrb(game_t game, rocket_t rocket, float zoom, game_t* gamestr) { //DEPRE
 void renderOrbit(game_t *game, float zoom, rocket_t *rocket) { //Renders orbit
     if (game->orbitRenderPos[2] < 1)
     {
-        drawEllipse(game->orbitRenderPos[0], game->orbitRenderPos[1], game->orbitRenderPos[3] - PI / 2, game->planetPos[0], game->planetPos[1], zoom, 100, 1, 1, 1, false);
-    } //else drawHyperbola(game->orbitRenderPos[0], game->orbitRenderPos[1], game->orbitRenderPos[3] - PI / 2, game->planetPos[0], game->planetPos[1], zoom, 100, 1, 1, 1, false);
+        drawEllipse(game->orbitRenderPos[0], game->orbitRenderPos[1], game->orbitRenderPos[3] + PI / 2, game->planetPos[0], game->planetPos[1], zoom, 100, 1, 1, 1, false);
+    } else drawHyperbola(game->orbitRenderPos[0], game->orbitRenderPos[1], game->orbitRenderPos[3] + PI / 2, game->planetPos[0], game->planetPos[1], zoom, 100, 1, 1, 1, false);
     
 }
 /*
