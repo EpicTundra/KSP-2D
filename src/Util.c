@@ -55,7 +55,7 @@ void drawEllipse(float major, float minor, float angle, float focalx, float foca
     glPushMatrix();
 
     // Step 1: Move to the focal position
-    glTranslatef(focalx* METER2GL * zoom, focaly* METER2GL * zoom, 0.0);
+    glTranslatef(focalx* METER2GL * zoom, (focaly) * METER2GL * zoom, 0.0);
 
     // Step 2: Rotate the entire coordinate system
     //glRotatef(angle * RAD2DEG, 0.0, 0.0, 1.0); //Wasn't feeding in in degrees

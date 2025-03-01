@@ -79,7 +79,7 @@ void rocketInit(rocket_t* rocket) {
 
     rocket->size = 6.0f;
 
-    rocket->speed[0] = 22;//changing
+    rocket->speed[0] = 21.5;//changing
     rocket->speed[1] = 0;
 
     rocket->calcOrbit = 0;
@@ -97,7 +97,7 @@ void rocketInit(rocket_t* rocket) {
 }
 
 void gameInit(game_t* game) {
-    game->planetPos[0] = -10;
+    game->planetPos[0] = -1;
     game->planetPos[1] = 380;
     game->zoom = 4;
     game->planetRad = 300;
@@ -115,37 +115,44 @@ void calcOrbit(game_t* game, rocket_t* rocket) { //Finds orbitals paramaters
     float distance = dist(game->planetPos[0], game->planetPos[1]);
     float velocity = sqrt(square(rocket->speed[0]) + square(rocket->speed[1]));
 
-    //Is actually semi major...
-    float major = 1 / (2 / distance - (square(velocity) / mu));//Derived from the vis viva equation
+    //Ellipse or Hyperbolic?
+    float orbitalEnergy = square(velocity) / 2 - mu / distance;
+    if (orbitalEnergy < 0) //Ellipse
+    {
+
+        //Is actually semi major...
+        float major = 1 / (2 / distance - (square(velocity) / mu));//Derived from the vis viva equation
 
 
-    //Find eccentricity of orbit from givens
-    float h = -game->planetPos[0] * rocket->speed[1] + (game->planetPos[1] * rocket->speed[0]); //Positive means counter clockwise roation
-    float e = sqrt(1 - (square(h) / (mu * major)));
-    float minor = major * (1 - square(e));
+        //Find eccentricity of orbit from givens
+        float h = -game->planetPos[0] * rocket->speed[1] + (game->planetPos[1] * rocket->speed[0]); //Positive means counter clockwise roation
+        float e = sqrt(1 - (square(h) / (mu * major)));
+        float minor = major * sqrt(1 - square(e));
+        //Really semi minor...
 
 
-    //Find argument of periapsis
-    float trueAnom = acosf( (square(2 * major * e) + square(distance) - square(2 * major - distance)) / (4 * major * e * distance) );
+        //Find argument of periapsis              ------      Figure out how to derive this
+        float trueAnom = acosf((square(2 * major * e) + square(distance) - square(2 * major - distance)) / (4 * major * e * distance));
 
-    float periArg;
-    float rocketAngle = atan2f(-game->planetPos[1], -game->planetPos[0]) + PI/2;
+        float periArg;
+        float rocketAngle = atan2f(-game->planetPos[1], -game->planetPos[0]) + PI / 2;
 
-    float futurePos = square(rocket->speed[0] * 0.001 - game->planetPos[0]) + square(rocket->speed[1] * 0.001- game->planetPos[1]);
-    if (futurePos > square(distance)) {
         periArg = rocketAngle + trueAnom;
-    }
-    else if (futurePos < square(distance)) {
-        periArg = rocketAngle - trueAnom;
-    }
-    else periArg = 0;
-    
 
 
-    game->orbitRenderPos[0] = major;
-    game->orbitRenderPos[1] = minor;
-    game->orbitRenderPos[2] = e;
-    game->orbitRenderPos[3] = periArg;
+        game->orbitRenderPos[0] = major;
+        game->orbitRenderPos[1] = minor;
+        game->orbitRenderPos[2] = e;
+        game->orbitRenderPos[3] = periArg;
+    }
+    else if (orbitalEnergy > 0) {
+
+    }
+    else
+    {
+        game->planetPos[0] += 0.0001;
+            calcOrbit(game, rocket);
+    }
 }
 
 void disOrb(game_t game, rocket_t rocket, float zoom, game_t* gamestr) { //DEPRECATED. displays future orbital trajectory
