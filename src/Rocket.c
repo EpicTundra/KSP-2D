@@ -114,42 +114,59 @@ void calcOrbit(game_t* game, rocket_t* rocket) { //Finds orbitals paramaters
     float mu = G * game->planetMass;
     float distance = dist(game->planetPos[0], game->planetPos[1]);
     float velocity = sqrt(square(rocket->speed[0]) + square(rocket->speed[1]));
+    float h = -game->planetPos[0] * rocket->speed[1] + (game->planetPos[1] * rocket->speed[0]); //Positive means counter clockwise roation
 
-    //Ellipse or Hyperbolic?
-    float orbitalEnergy = square(velocity) / 2 - mu / distance;
-    if (orbitalEnergy < 0) //Ellipse
+
+    //Is actually semi major...
+    float major = 1 / (2 / distance - (square(velocity) / mu));//Derived from the vis viva equation
+
+    //Find eccentricity of orbit from givens
+    float e = sqrt(1 - (square(h) / (mu * major)));
+
+    if (e < 1) //Ellipse
     {
-
-        //Is actually semi major...
-        float major = 1 / (2 / distance - (square(velocity) / mu));//Derived from the vis viva equation
-
-
-        //Find eccentricity of orbit from givens
-        float h = -game->planetPos[0] * rocket->speed[1] + (game->planetPos[1] * rocket->speed[0]); //Positive means counter clockwise roation
-        float e = sqrt(1 - (square(h) / (mu * major)));
         float minor = major * sqrt(1 - square(e));
         //Really semi minor...
 
 
-        //Find argument of periapsis              ------      Figure out how to derive this
+        //Find argument of periapsis    True Anomoly gives relative angle spacecraft in to apoapsis
         float trueAnom = acosf((square(2 * major * e) + square(distance) - square(2 * major - distance)) / (4 * major * e * distance));
 
         float periArg;
         float rocketAngle = atan2f(-game->planetPos[1], -game->planetPos[0]) + PI / 2;
+        if (h < 0){
+            float futurePos = square(rocket->speed[0] * 0.001 - game->planetPos[0]) + square(rocket->speed[1] * 0.001 - game->planetPos[1]);
+            if (futurePos > square(distance)) {
+                periArg = rocketAngle - trueAnom;
+            } else periArg = rocketAngle + trueAnom;
+        } else periArg = rocketAngle + trueAnom;
 
-        periArg = rocketAngle + trueAnom;
-
-
+        
+        //Cast values to orbit render
         game->orbitRenderPos[0] = major;
         game->orbitRenderPos[1] = minor;
         game->orbitRenderPos[2] = e;
         game->orbitRenderPos[3] = periArg;
     }
-    else if (orbitalEnergy > 0) {
-
-    }
-    else
+    else if (e > 1) 
     {
+        //Hyperbolic true anomoly, called v for whos knows why?
+        float v = acosf((major * (1 - square(e)) / distance - 1) / e);
+
+        //Abolute value so minor is positive
+        float minor = fabs(major) * sqrt(square(e) - 1);
+
+        float periArg;
+        float rocketAngle = atan2f(-game->planetPos[1], -game->planetPos[0]) + PI / 2;
+
+        periArg = rocketAngle + v;
+
+        game->orbitRenderPos[0] = fabs(major);
+        game->orbitRenderPos[1] = minor;
+        game->orbitRenderPos[2] = e;
+        game->orbitRenderPos[3] = periArg;
+    } else
+    { //If parabolic. Highly unlikely and this should atleast prevent crashes.
         game->planetPos[0] += 0.0001;
             calcOrbit(game, rocket);
     }
@@ -294,10 +311,11 @@ void disOrb(game_t game, rocket_t rocket, float zoom, game_t* gamestr) { //DEPRE
 
 
 void renderOrbit(game_t *game, float zoom, rocket_t *rocket) { //Renders orbit
-     drawEllipse(game->orbitRenderPos[0], game->orbitRenderPos[1], game->orbitRenderPos[3] - PI / 2, game->planetPos[0], game->planetPos[1], zoom, 100, 1, 1, 1, false);
-     // - ((game->orbitRenderPos[0] - game->orbitRenderPos[1]) * 0.4)
-     //drawRect(game->planetPos[0] / 2, game->planetPos[1] / 2, game->orbitRenderPos[0], 7, atan2f(-game->planetPos[1], -game->planetPos[0]) / DEGREETORAD + 90, zoom, 1, 1, 1, true);
-     //drawCircle(game->orbitRenderPos[0] + (game->orbitRenderPos[0] * game->orbitRenderPos[2]), game->planetPos[0], game->planetPos[1], zoom, 100, 1, 190, 1);
+    if (game->orbitRenderPos[2] < 1)
+    {
+        drawEllipse(game->orbitRenderPos[0], game->orbitRenderPos[1], game->orbitRenderPos[3] - PI / 2, game->planetPos[0], game->planetPos[1], zoom, 100, 1, 1, 1, false);
+    } //else drawHyperbola(game->orbitRenderPos[0], game->orbitRenderPos[1], game->orbitRenderPos[3] - PI / 2, game->planetPos[0], game->planetPos[1], zoom, 100, 1, 1, 1, false);
+    
 }
 /*
 * void renderOrbit(float (*renderPositions)[301][3], float zoom, float originalPosx, float originalPosy, rocket_t *rocket, game_t *game) { //Renders orbit

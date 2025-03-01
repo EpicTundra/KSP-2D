@@ -132,9 +132,8 @@ void game_draw() {
 
         //for new orbit code have a variable with the rocket that is set to true when engines fire and will then recalculate orbit, but doesn't otherwise do anything
         calcOrbit(&game, &rocket);
-        if (game.orbitRenderPos[2] <= 1){
-            renderOrbit(&game, camera.zoom, &rocket);
-        }
+        renderOrbit(&game, camera.zoom, &rocket);
+        
         //drawEllipse(game.orbitRenderPos[0], game.orbitRenderPos[1], game.orbitRenderPos[3], game.planetPos[0], game.planetPos[1], camera.zoom, 100, 1, 1, 1, false);
 
         //float renderFidely = 4; 

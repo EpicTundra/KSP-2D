@@ -86,70 +86,48 @@ void drawEllipse(float major, float minor, float angle, float focalx, float foca
     glEnd();
 
     glPopMatrix();
+}
 
+void drawHyperbola(float major, float minor, float angle, float focalx, float focaly, float zoom, int pointcount, float r, float g, float b, bool dashed) {
+  
+    float c = sqrt(major * major + minor * minor); // Focal distance
 
     glPushMatrix();
 
     // Step 1: Move to the focal position
-    glTranslatef((focalx + 0) * METER2GL * zoom, (focaly + 0) * METER2GL * zoom, 0.0);
+    glTranslatef(focalx * METER2GL * zoom, (focaly)*METER2GL * zoom, 0.0);
 
     // Step 2: Rotate the entire coordinate system
-    //glRotatef(angle * RAD2DEG, 0.0, 0.0, 1.0);
+    //glRotatef(angle * RAD2DEG, 0.0, 0.0, 1.0); //Wasn't feeding in in degrees
 
     // Step 3: Scale for zoom
     glScalef(zoom, zoom, 1.0);
 
     // Start drawing the ellipse
-    glBegin(GL_LINE_LOOP);
+    glBegin(GL_LINES);
     glColor3f(r, g, b);
 
-    for (int i = 0; i < pointcount; i++) {
-        float t = 2.0 * PI * i / pointcount;
+    float cs = cos(angle); //Cosine
+    float sn = sin(angle); //Sin
+    float halfPi = PI * 0.5 - 0.1;
 
-        float x = 3 * cos(t);
-        float y = 3 * sin(t);
+    for (int i = 0; i < pointcount; i++) {
+        float t = PI * (pointcount / (pointcount - 10)) * i / pointcount - halfPi  ;
+
+        float x = major / cos(t) - c;
+        float y = minor * tan(t);
+
+        float rx = x * cs - y * sn;
+        float ry = x * sn + y * cs;
 
         // No need to manually rotate; OpenGL handles it
-        glVertex2f(x * METER2GL, y * METER2GL);
+        glVertex2f(rx * METER2GL, ry * METER2GL);
     }
 
     glEnd();
 
     glPopMatrix();
 }
-
-
-
-/*
-    float c = sqrt(square(major) - square(minor)); //focal distance
-    float cx = focalx + (sin(angle * DEGREETORAD) * c);
-    float cy = focaly + (-cos(angle * DEGREETORAD) * c);
-    glPushMatrix();
-    glRotatef(angle, 0, 0, 1.0);
-    glTranslatef((cx * METER2GL) * zoom, (cy * METER2GL) * zoom, 0.0f);
-    glScalef(zoom, zoom, 1);
-    if (dashed)
-    {
-        glBegin(GL_LINE);
-        glColor3f(r, g, b);
-        for (int i = 0; i < pointcount; i++) {
-            float x = cos   (2 * PI / pointcount * i);
-            float y = sin(2 * PI / pointcount * i);
-            glVertex2f(x * major * METER2GL, y * minor * METER2GL);
-        }
-    }
-    else {
-        glBegin(GL_LINE_LOOP);
-        glColor3f(r, g, b);
-        for (int i = 0; i < pointcount; i++) {
-            float x = cos(2 * PI / pointcount * i);
-            float y = sin(2 * PI / pointcount * i);
-            glVertex2f(x * major * METER2GL, y * minor * METER2GL);
-        }
-    }
-    glEnd();
-    glPopMatrix();
-*/
 
 void drawCircle(float radius, float cx, float cy, float zoom, int pointcount, float r, float g, float b) { //Draw circle weeee
     glPushMatrix();
