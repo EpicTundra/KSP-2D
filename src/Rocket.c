@@ -156,6 +156,22 @@ void calcOrbit(game_t* game, rocket_t* rocket) { //Finds orbitals paramaters
         game->orbitRenderPos[1] = minor;
         game->orbitRenderPos[2] = e;
         game->orbitRenderPos[3] = periArg;
+
+
+
+        //E orbit.  Future mean anomoly test bed
+
+        float n = sqrtf(mu / pow(major, 3));
+        float E0 = 2 * atanf(sqrt((1 + e) / (1 - e)) * tan(trueAnom / 2));
+        float M0 = E0 - e * sin(E0);
+        float v = 2 * atanf(sqrt((1 + e) / (1 - e)) * tan(E0 / 2));
+        float r = (major * (1 - square(e))) / (1 + e * cos(v));
+        float x = r * (v);
+        float y = r * sin(v);
+        float xdif = x + game->planetPos[0];
+        float ydif = y + game->planetPos[1];
+
+
     }
     else if (e > 1) 
     {

@@ -1,7 +1,7 @@
 #pragma once
 
 #define PI 3.14159265358979323846
-#define E 2.718281828459045
+#define eulers 2.718281828459045
 #define atmoHeight 30
 #include "Parts.h"
 
