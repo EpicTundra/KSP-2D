@@ -130,7 +130,13 @@ void calcOrbit(game_t* game, rocket_t* rocket) { //Finds orbitals paramaters
 
 
         //Find argument of periapsis    True Anomoly gives relative angle spacecraft in to apoapsis
-        float trueAnom = acosf( (major * (1 - square(e)) / distance - 1) / e);//(square(2 * major * e) + square(distance) - square(2 * major - distance)) / (4 * major * e * distance)
+        float trueAnom = acosf((major * (1 - square(e)) / distance - 1) / e);//(square(2 * major * e) + square(distance) - square(2 * major - distance)) / (4 * major * e * distance)
+        if (sign(game->planetPos[1]) > 0) {
+            if (sign(game->planetPos[1]) > 0) {
+                trueAnom = PI - trueAnom;
+            }
+            else trueAnom = ghghA;
+        }
 
         float periArg;
         float rocketAngle = atan2f(-game->planetPos[1], -game->planetPos[0]) + PI / 2;
@@ -166,12 +172,12 @@ void calcOrbit(game_t* game, rocket_t* rocket) { //Finds orbitals paramaters
         float M0 = E0 - e * sin(E0);
         float v = 2 * atanf(sqrt((1 + e) / (1 - e)) * tan(E0 / 2));
         float r = (major * (1 - square(e))) / (1 + e * cos(v));
-        float x = r * (v);
+        float x = r * cos(v);
         float y = r * sin(v);
         float xdif = x + game->planetPos[0];
         float ydif = y + game->planetPos[1];
 
-
+        float t = 0;
     }
     else if (e > 1) 
     {
