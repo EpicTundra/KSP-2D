@@ -219,7 +219,7 @@ void telemetryRender(bool mapView) {
 
 
     if (mapView) { //Only when in map view
-        sprintf(fuelText, "Fuel: %f", game.orbitRenderPos[0] + (game.orbitRenderPos[0] * game.orbitRenderPos[2]));
+        sprintf(fuelText, "Fuel: %f", game.orbitRenderPos[2]);
         sprintf(distText, "Dist: %f", dist(game.planetPos[1], game.planetPos[0]));//dist(game.planetPos[1], game.planetPos[0])
 
         glDrawText((unsigned char*)distText, 10, 10, 0xffffff, 0);

@@ -131,39 +131,33 @@ void calcOrbit(game_t* game, rocket_t* rocket) { //Finds orbitals paramaters
 
         //Find argument of periapsis    True Anomoly gives relative angle spacecraft in to apoapsis
         float trueAnom = acosf((major * (1 - square(e)) / distance - 1) / e);//(square(2 * major * e) + square(distance) - square(2 * major - distance)) / (4 * major * e * distance)
-        if (sign(game->planetPos[1]) > 0) {
-            if (sign(game->planetPos[1]) > 0) {
-                trueAnom = PI - trueAnom;
-            }
-            else trueAnom = ghghA;
-        }
 
         float periArg;
         float rocketAngle = atan2f(-game->planetPos[1], -game->planetPos[0]) + PI / 2;
-        float futurePos = square(rocket->speed[0] * 0.001 - game->planetPos[0]) + square(rocket->speed[1] * 0.001 - game->planetPos[1]);
-        float squareD = square(distance);
-
-        if (h < 0){
-            if (futurePos > squareD) {
-                periArg = rocketAngle + trueAnom;
-            }
-            else periArg = rocketAngle - trueAnom;
-        }
-        else {
-            if (futurePos > squareD) {
-                periArg = rocketAngle - trueAnom;
-            }
-            else periArg = rocketAngle + trueAnom;
-        }
+        float radialVelocity = (-game->planetPos[1] * rocket->speed[1] - game->planetPos[0] * rocket->speed[1]);
 
         
+        trueAnom *= sign(h);
+
+        if (radialVelocity < 0) {
+            trueAnom = 2 * PI - trueAnom;
+        }
+        game->orbitRenderPos[2] = trueAnom;
+
+
+
+        periArg = rocketAngle - trueAnom;
+        periArg = fmodf(periArg, PI);
+
+
+        trueAnom -= PI;
         //Cast values to orbit render
         game->orbitRenderPos[0] = major;
         game->orbitRenderPos[1] = minor;
-        game->orbitRenderPos[2] = e;
         game->orbitRenderPos[3] = periArg;
 
 
+        
 
         //E orbit.  Future mean anomoly test bed
 
@@ -177,7 +171,9 @@ void calcOrbit(game_t* game, rocket_t* rocket) { //Finds orbitals paramaters
         float xdif = x + game->planetPos[0];
         float ydif = y + game->planetPos[1];
 
+
         float t = 0;
+
     }
     else if (e > 1) 
     {
