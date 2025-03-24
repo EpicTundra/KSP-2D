@@ -134,33 +134,29 @@ void calcOrbit(game_t* game, rocket_t* rocket) { //Finds orbitals paramaters
 
         float periArg;
         float rocketAngle = atan2f(-game->planetPos[1], -game->planetPos[0]) + PI / 2;
-        float radialVelocity = (-game->planetPos[1] * rocket->speed[1] - game->planetPos[0] * rocket->speed[1]);
+        float radialVelocity = (-game->planetPos[1] * rocket->speed[1] - game->planetPos[0] * rocket->speed[0]);
 
-        
-        trueAnom *= sign(h);
 
-        if (radialVelocity < 0) {
-            trueAnom = 2 * PI - trueAnom;
+        if (radialVelocity > 0) { //When in second half of orbit
+            trueAnom = trueAnom - PI;
         }
-        game->orbitRenderPos[2] = trueAnom;
-
+        else trueAnom = PI - trueAnom; //When in first half of orbit after periapsis
+        trueAnom *= sign(h);
 
 
         periArg = rocketAngle - trueAnom;
-        periArg = fmodf(periArg, PI);
+        //periArg = fmodf(periArg, 2 * PI); tagged for deleting
 
+        periArg -= PI;
 
-        trueAnom -= PI;
         //Cast values to orbit render
         game->orbitRenderPos[0] = major;
         game->orbitRenderPos[1] = minor;
+        game->orbitRenderPos[2] = e;
         game->orbitRenderPos[3] = periArg;
-
-
         
 
         //E orbit.  Future mean anomoly test bed
-
         float n = sqrtf(mu / pow(major, 3));
         float E0 = 2 * atanf(sqrt((1 + e) / (1 - e)) * tan(trueAnom / 2));
         float M0 = E0 - e * sin(E0);
@@ -183,24 +179,23 @@ void calcOrbit(game_t* game, rocket_t* rocket) { //Finds orbitals paramaters
         //Abolute value so minor is positive
         float minor = fabs(major) * sqrt(square(e) - 1);
 
-        float periArg;
         float rocketAngle = atan2f(-game->planetPos[1], -game->planetPos[0]) + PI / 2;
+        float periArg;
 
-        //Check if periapsis is ahead of or behind us.
-        float futurePos = square(rocket->speed[0] * 0.001 - game->planetPos[0]) + square(rocket->speed[1] * 0.001 - game->planetPos[1]);
+        //Check if periapsis is ahead of or behind us through radial velocity
+        float radialVelocity = (-game->planetPos[1] * rocket->speed[1] - game->planetPos[0] * rocket->speed[0]);
 
-        if (h < 0) {
-            if (futurePos > square(distance)) {
-                periArg = rocketAngle + v;
-            }
-            else periArg = rocketAngle - v;
+
+        if (radialVelocity > 0) { //When in second half of orbit
+            v = v - PI;
         }
-        else {
-            if (futurePos > square(distance)) {
-                periArg = rocketAngle - v;
-            }
-            else periArg = rocketAngle + v;
-        }
+        else v = PI - v; //When in first half of orbit after periapsis
+
+        v *= sign(h);
+
+        v -= PI;
+
+        periArg = rocketAngle - v;
 
         game->orbitRenderPos[0] = fabs(major);
         game->orbitRenderPos[1] = minor;

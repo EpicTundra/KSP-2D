@@ -81,5 +81,5 @@ int main(int argc, char** argv) {
         }//if we need to delay, and we dont have make up time, then delay
     }
 
-    return 0;
+    return 1;
 }
