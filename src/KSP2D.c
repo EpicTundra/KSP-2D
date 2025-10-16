@@ -175,23 +175,22 @@ int input(int input) {
     return ((input - 0.5) * 2);
 }
 
-void deltaT() {
+void updatedeltaT() { //dt is a class variable
     tNow = SDL_GetTicks64();
     dt = tNow - tLast;
     tLast = tNow;
-    return dt;
 }
 
 void physics() { //Abstract so can be called in map and normal game screen
     float x = game.planetPos[0];
     float y = game.planetPos[1];
 
-    deltaT();//Updates DeltaT, variable dt delcared in KSP2D
+    updatedeltaT();//Updates DeltaT, variable dt delcared in KSP2D
     speedUpdate(&rocket, x, y, game.planetRad, game.planetMass);
 
     for (size_t i = 0; i < 2; i++) //Move rocket according to deltaTime
     {
-        game.planetPos[i] -= (rocket.speed[i] / (1000.0f / (dt + 1)));
+        game.planetPos[i] -= (rocket.speed[i] / (1000.0f / (dt)));
     }
 
     while (dist(game.planetPos[0], game.planetPos[1]) < game.planetRad + rocket.size) //Checks if distances are too small and then fixed them
